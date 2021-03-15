@@ -1,0 +1,21 @@
+<script type="text/javascript">
+$(document).ready(function () {
+
+	$("#doku_submit").click(function (event) {
+	  event.preventDefault()
+		$.post("{{ urlSetProses }}", {
+			invoice_number: "{{ invoice_number }}"
+		}, function (data) {
+			document.doku_form.submit();
+		});
+	});
+});
+</script>
+
+<form id="doku_form" name="doku_form" action="{{ urlLocal }}" method="post">
+	<div class="buttons">
+		<div class="pull-right">
+			<input type="submit" id="doku_submit" value="{{ button_confirm }}" class="btn btn-primary"/>
+		</div>
+	</div>
+</form>
