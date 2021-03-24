@@ -45,15 +45,15 @@ Jokul makes it easy for you accept payments from various channels. Jokul also hi
 9. Now your customer should be able to see the payment channels and you start receiving payments
 ​
 ### VA Configuration
+
+![VA Configuration](https://i.ibb.co/cN0W4MZ/Screen-Shot-2021-03-24-at-20-26-21.png)
 ​
 To enable VA, you will need to enable each of them:
+
 1. In the `Extensions` > `Payment`
 2. Click Enable on `Jokul - {{Channel Name}}`. For example: `Jokul - BCA VA`
-3. You can lso Configure how you display the channel to your customers
+3. You can configure how you display the channel to your customers.
 
-This is the preview of the Virtual Account Configuration
-​
-![VA Configuration](https://i.ibb.co/cN0W4MZ/Screen-Shot-2021-03-24-at-20-26-21.png)
 ​
 To show the VA options to your customers, select each payment channel.
 ​
