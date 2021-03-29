@@ -57,8 +57,7 @@ class ControllerExtensionPaymentDOKU extends Controller
             $this->load->model('checkout/order');
 //            $this->model_checkout_order->addOrderHistory($invoice_number, $this->config->get('payment_doku_companyid'), 'DOKU Payment Initiate', true);
         } else {
-            echo "Stop : Access Not Valid";
-            $this->log->write("DOKU Process Not in Correct Format - IP Logged " . $this->getipaddress());
+            $this->log->write("Invalid Request - IP Logged " . $this->getipaddress());
         }
     }
     public function getipaddress()
@@ -184,10 +183,10 @@ class ControllerExtensionPaymentDOKU extends Controller
 
         $signature = $this->doCreateNotifySignature($signatureParams, $rawbody);
 
-        $this->log->write("Parameter used " . print_r($postData, true));
-        $this->log->write("Request target " . $serverpath . '/index.php?route=extension/payment/doku/notify');
+        $this->log->write("Notify Request Body: " . print_r($postData, true));
+        $this->log->write("Request Target: " . $serverpath . '/index.php?route=extension/payment/doku/notify');
         if (empty($postData)) {
-            $this->log->write("DOKU Notify Not in Correct Format - IP Logged " . $this->getipaddress());
+            $this->log->write("Invalid Request Body format - IP Logged " . $this->getipaddress());
             http_response_code(400);
             die;
         }
@@ -200,18 +199,17 @@ class ControllerExtensionPaymentDOKU extends Controller
         $trx['notify_type'] = "P"; //change if reverse is used
 
         if ($headers['Signature'] != $signature) {
-            $this->log->write("WORDS " . $signature);
-            $this->log->write("DOKU Notify Invalid Signature - IP Logged " . $this->getipaddress());
-            http_response_code(400);
+            $this->log->write("Signature: " . $signature);
+            $this->log->write("Jokul Notification Invalid Signature - IP Logged " . $this->getipaddress());
+            http_response_code(401);
             die;
         }
 
         if ($postData["transaction"]["status"] == "SUCCESS") {
             $result = $this->checkTrx($trx);
             if ($result < 1) {
-                echo "Stop : Transaction Not Found 0";
-                $this->log->write("DOKU Notify Cannot Find Transactions - IP Logged " . $this->getipaddress());
-                http_response_code(400);
+                $this->log->write("Cannot find the transaction - IP Logged " . $this->getipaddress());
+                http_response_code(404);
                 die;
             } else {
                 $trx['result_msg'] = 'SUCCESS';
@@ -225,8 +223,7 @@ class ControllerExtensionPaymentDOKU extends Controller
                 http_response_code(200);
             }
         } else {
-            echo "Stop : Transaction Not Found 1";
-            $this->log->write("DOKU Notify Cannot Find Transactions - IP Logged " . $this->getipaddress());
+            $this->log->write("Cannot find the transaction - IP Logged " . $this->getipaddress());
             $this->load->model('checkout/order');
             $trx['result_msg'] = 'FAILED';
             $this->model_checkout_order->addOrderHistory($trx['invoice_number'], 10, 'FAILED', true);
@@ -234,7 +231,7 @@ class ControllerExtensionPaymentDOKU extends Controller
                 if ($resultFailed < 1) {
                     $this->add_dokuonecheckout($trx);
                 }
-            http_response_code(400);
+            http_response_code(404);
             die;
         }
     }
@@ -256,21 +253,6 @@ class ControllerExtensionPaymentDOKU extends Controller
     {
         $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "doku" . " WHERE process_type = '$process'" . " AND invoice_number = '" . $trx['invoice_number'] . "'" . " AND amount = '" . $trx['amount'] . "'" . " AND payment_code = '" . $trx['payment_code'] . "'");
         return $query->num_rows;
-    }
-
-    public function generateCheckSum($data)
-    {
-        return hash(
-            'sha256',
-            $data['client_id'] .
-                $data['email'] .
-                $data['customer_name'] .
-                round($data['amount']) .
-                $data['invoice_number'] .
-                $data['expired_time'] .
-                $data['reusable_status'] .
-                htmlspecialchars_decode($data['sharedkey'])
-        );
     }
 
     public function post($url, $rawData, $signatureParams)
@@ -381,15 +363,15 @@ class ControllerExtensionPaymentDOKU extends Controller
         $channelName = '';
 
         if ($paymentchannel == 'jokul_va_mandiri') {
-            $channelName = 'Mandiri Virtual Account';
+            $channelName = 'Bank Mandiri VA';
         } else if ($paymentchannel == 'jokul_va_syariah_indonesia') {
-            $channelName = 'Syariah Indonesia Virtual Account';
+            $channelName = 'Bank Syariah Indonesia VA';
         } else if ($paymentchannel == 'jokul_va_bca') {
-            $channelName = 'BCA Virtual Account';
+            $channelName = 'BCA VA';
         } else if ($paymentchannel == 'jokul_va_permata') {
-            $channelName = 'Permata Virtual Account';
+            $channelName = 'Bank Permata';
         } else if ($paymentchannel == 'jokul_va_doku') {
-            $channelName = 'Other ATMs (VA by DOKU)';
+            $channelName = 'Other Banks (VA by DOKU)';
         }
 
         if (isset($responsePayment->virtual_account_info->virtual_account_number) && $httpcode == 200) {

@@ -87,7 +87,7 @@ class ControllerExtensionPaymentJokulVADoku extends Controller
         //move to language later
         $data['va_input_label'] = $this->language->get('va_input_label');
         $data['channel_code'] = self::CHANNEL_CODE;
-        $data['channel_name'] = "Other ATMs (VA by DOKU)";
+        $data['channel_name'] = "Other Banks (VA by DOKU)";
         //end
 
         $this->response->setOutput($this->load->view('extension/payment/jokulva', $data));
