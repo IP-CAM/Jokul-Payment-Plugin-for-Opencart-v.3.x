@@ -176,7 +176,7 @@ class ControllerExtensionPaymentDOKU extends Controller
         $signatureParams = array(
             "clientId" => $headers["Client-Id"],
             "key" => $sharedKey,
-            "requestTarget" => $serverpath . '/index.php?route=extension/payment/doku/notify',
+            "requestTarget" => $serverpath . '/index.php',
             "requestId" => $headers['Request-Id'],
             "requestTimestamp" => $headers['Request-Timestamp']
         );
