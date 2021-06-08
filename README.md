@@ -17,6 +17,8 @@ Jokul makes it easy for you accept payments from various channels. Jokul also hi
     - Bank Syariah Indonesia VA
     - Permata VA
     - DOKU VA
+2. Alfamart O2O
+3. Credit Card
 ## How to Install
 1. Download this repo
 2. Copy all the source code `Jokul` folder into your `OpenCart root folder` and merge it.
