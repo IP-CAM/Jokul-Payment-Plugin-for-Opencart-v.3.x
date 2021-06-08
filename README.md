@@ -62,3 +62,23 @@ To show the VA options to your customers, select each payment channel.
 You can also edit how the VA channels will be shown to your customers by inputing below:  
 ​
 - **Payment Channel Name Label**: Input the display name. This title will be visible in your store view
+
+### Credit Card Configuration
+
+![Credit Card Configuration](https://i.ibb.co/djTnq3X/Screen-Shot-2021-06-08-at-12-10-51.png)
+
+To show the Credit Card options to your customers, simply toggle the channel that you wish to show.
+
+![Credit Card Configuration Details](https://i.ibb.co/RbF82V4/Screen-Shot-2021-06-08-at-12-12-34.png)
+
+You can also click Manage to edit how the Credit Card channels will be shown to your customers by clicking the Manage button.
+
+### Alfamart O2O Configuration
+
+![Alfamart O2O Configuration](https://i.ibb.co/djTnq3X/Screen-Shot-2021-06-08-at-12-10-51.png)
+
+To show the Alfamart O2O options to your customers, simply toggle the channel that you wish to show.
+
+![Alfamart O2O Configuration Details](https://i.ibb.co/LYzTyMr/Screen-Shot-2021-06-08-at-12-13-40.png)
+
+You can also click Manage to edit how the Alfamart O2O channels will be shown to your customers by clicking the Manage button.
