@@ -1,0 +1,16 @@
+{{ header }}{{ column_left }}{{ column_right }}
+<div class="container">{{ content_top }}
+  <div style="text-align:center;">
+  </br></br></br>
+    <h1>{{ heading_title }}</h1>
+    <h3>Payment Amount : Rp {{ amount }}</h3>
+    <p>Payment Channel : {{ channel_name }}<br>
+    <p>Invoice Number : {{ invoice_number }}<br>
+		<div class="buttons">
+			<div class="right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+			</br></br></br>
+		</div>		
+  </div>
+  {{ content_bottom }}
+</div>
+{{ footer }}

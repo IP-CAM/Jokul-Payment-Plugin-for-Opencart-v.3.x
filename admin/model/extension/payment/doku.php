@@ -4,7 +4,7 @@ class ModelExtensionPaymentDOKU extends Model {
 
 	public function install() {
 		$this->db->query("
-		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "doku` (
+		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "jokul` (
 		`trx_id` INT(11) NOT NULL AUTO_INCREMENT,
 		`ip_address` VARCHAR(16),
 		`process_type` VARCHAR(15),
@@ -24,9 +24,6 @@ class ModelExtensionPaymentDOKU extends Model {
 		`creditcard` VARCHAR(16),
 		`words` VARCHAR(200),
 		`session_id` VARCHAR(48),
-		`verify_id` VARCHAR(30),
-		`verify_score` INT(3) NOT NULL DEFAULT 0,
-		`verify_status` VARCHAR(10),
 		`check_status` INT(1) NOT NULL DEFAULT 0,
 		`count_check_status` INT(1) NOT NULL DEFAULT 0,
 		`message` VARCHAR(512),
@@ -37,7 +34,7 @@ class ModelExtensionPaymentDOKU extends Model {
 
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "doku`;");
+		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "jokul`;");
 	}
 
 }

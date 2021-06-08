@@ -1,0 +1,95 @@
+{{ header }}{{ column_left }}
+<div id="content">
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="pull-right">
+				<button type="submit" form="form-doku-onecheckout" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary">
+					<i class="fa fa-save"></i>
+				</button>
+				<a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default">
+					<i class="fa fa-reply"></i>
+				</a>
+			</div>
+			<h1>{{ heading_title }}</h1>
+			<ul class="breadcrumb">
+				{% for breadcrumb in breadcrumbs %}
+					<li>
+						<a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	<div class="container-fluid">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					<i class="fa fa-pencil"></i>
+					Payment Channel Configuration</h3>
+			</div>
+			<div class="panel-body">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-doku" class="form-horizontal">
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="">{{ cc_input_label }}</label>
+						<div class="col-sm-3">
+							<select name={{"payment_jokul#{channel_code}_status"}} id={{"payment_jokul#{channel_code}_status"}} class="form-control">
+								{% if channel_status %}
+									<option value="1" selected="selected">Enable</option>
+									<option value="">Disable</option>
+								{% else %}
+									<option value="1">Enable</option>
+									<option value="" selected="selected">Disable</option>
+								{% endif %}
+							</select>
+						</div>
+						<div class="col-sm-4">
+							<input type="text" name={{"payment_jokul#{channel_code}_name"}} value="{{ channel_name }}" placeholder="Input your payment channel alias" class="form-control">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="">{{ jokul_cc_language }}</label>
+						<div class="col-sm-10">
+							<select name={{"payment_jokul#{channel_code}_language"}} id={{"payment_jokul#{channel_code}_language"}} class="form-control">
+								{% if jokul_cc_language %}
+									<option value="EN" selected="selected">English</option>
+									<option value="ID">Indonesia</option>
+								{% else %}
+									<option value="EN">English</option>
+									<option value="ID" selected="selected">Indonesia</option>
+								{% endif %}
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="">{{ jokul_cc_bg_color_label }}</label>
+						<div class="col-sm-10">
+							<input type="text" name={{"payment_jokul#{channel_code}_bg_color"}} id={{"payment_jokul#{channel_code}_bg_color"}} value="{{ jokul_cc_bg_color == '' ? '' : jokul_cc_bg_color }}" placeholder="Input your cc background color to be displayed" class="form-control"/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="">{{ jokul_cc_font_color_label }}</label>
+						<div class="col-sm-10">
+							<input type="text" name={{"payment_jokul#{channel_code}_font_color"}} id={{"payment_jokul#{channel_code}_font_color"}} value="{{ jokul_cc_font_color == '' ? '' : jokul_cc_font_color }}" placeholder="Input your cc font color to be displayed" class="form-control"/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="">{{ jokul_cc_button_bg_color_label }}</label>
+						<div class="col-sm-10">
+							<input type="text" name={{"payment_jokul#{channel_code}_button_bg_color"}} id={{"payment_jokul#{channel_code}_button_bg_color"}} value="{{ jokul_cc_button_bg_color == '' ? '' : jokul_cc_button_bg_color }}" placeholder="Input your cc button background color to be displayed" class="form-control"/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label" for="">{{ jokul_cc_button_font_color_label }}</label>
+						<div class="col-sm-10">
+							<input type="text" name={{"payment_jokul#{channel_code}_button_font_color"}} id={{"payment_jokul#{channel_code}_button_font_color"}} value="{{ jokul_cc_button_font_color == '' ? '' : jokul_cc_button_font_color }}" placeholder="Input your cc button font color to be displayed" class="form-control"/>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+		{{ footer }}
