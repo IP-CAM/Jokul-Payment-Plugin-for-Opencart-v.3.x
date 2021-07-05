@@ -4,7 +4,7 @@ class ModelExtensionPaymentJokulCc extends Model
 {
   public function getMethod($address, $total)
   {
-    $this->load->language('extension/payment/doku');
+    $this->load->language('extension/payment/jokul');
 
     $status = true;
 
@@ -16,7 +16,7 @@ class ModelExtensionPaymentJokulCc extends Model
         'code'       => 'jokul_cc',
         'title'      => $this->config->get('payment_jokul_cc_name'),
         'terms'      => '',
-        'sort_order' => $this->config->get('payment_doku_sort_order')
+        'sort_order' => $this->config->get('payment_jokul_sort_order')
       );
     }
 

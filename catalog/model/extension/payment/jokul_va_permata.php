@@ -4,7 +4,7 @@ class ModelExtensionPaymentJokulVAPermata extends Model
 {
   public function getMethod($address, $total)
   {
-    $this->load->language('extension/payment/doku');
+    $this->load->language('extension/payment/jokul');
 
     $status = true;
 
@@ -16,7 +16,7 @@ class ModelExtensionPaymentJokulVAPermata extends Model
         'code'       => 'jokul_va_permata',
         'title'      => $this->config->get('payment_jokul_va_permata_name'),
         'terms'      => '',
-        'sort_order' => $this->config->get('payment_doku_sort_order')
+        'sort_order' => $this->config->get('payment_jokul_sort_order')
       );
     }
 

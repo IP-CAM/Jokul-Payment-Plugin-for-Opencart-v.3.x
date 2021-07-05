@@ -5,20 +5,20 @@
  * and open the template in the editor.
  */
 
-class ControllerExtensionPaymentDOKU extends Controller
+class ControllerExtensionPaymentJokul extends Controller
 {
   private $error = array();
 
   public function index()
   {
-    $this->load->language('extension/payment/doku');
+    $this->load->language('extension/payment/jokul');
 
     $this->document->setTitle($this->language->get('heading_title'));
 
     $this->load->model('setting/setting');
 
     if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-      $this->model_setting_setting->editSetting('payment_doku', $this->request->post);
+      $this->model_setting_setting->editSetting('payment_jokul', $this->request->post);
 
       $this->session->data['success'] = $this->language->get('text_success');
 
@@ -87,34 +87,34 @@ class ControllerExtensionPaymentDOKU extends Controller
 
     $data['breadcrumbs'][] = array(
       'text'      => $this->language->get('heading_title'),
-      'href'      => $this->url->link('extension/payment/doku', 'user_token=' . $this->session->data['user_token'], true),
+      'href'      => $this->url->link('extension/payment/jokul', 'user_token=' . $this->session->data['user_token'], true),
       'separator' => ' :: '
     );
 
-    $data['action'] = $this->url->link('extension/payment/doku', 'user_token=' . $this->session->data['user_token'], true);
+    $data['action'] = $this->url->link('extension/payment/jokul', 'user_token=' . $this->session->data['user_token'], true);
 
     $data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token']  . '&type=payment', true);
 
 
-    if (isset($this->request->post['payment_doku_companyid'])) {
-      $data['payment_doku_companyid'] = $this->request->post['payment_doku_companyid'];
+    if (isset($this->request->post['payment_jokul_companyid'])) {
+      $data['payment_jokul_companyid'] = $this->request->post['payment_jokul_companyid'];
     } else {
-      $data['payment_doku_companyid'] = $this->config->get('payment_doku_companyid');
+      $data['payment_jokul_companyid'] = $this->config->get('payment_jokul_companyid');
     }
-    if (isset($this->request->post['payment_doku_server_set'])) {
-      $data['payment_doku_server_set'] = $this->request->post['payment_doku_server_set'];
+    if (isset($this->request->post['payment_jokul_server_set'])) {
+      $data['payment_jokul_server_set'] = $this->request->post['payment_jokul_server_set'];
     } else {
-      $data['payment_doku_server_set'] = $this->config->get('payment_doku_server_set');
+      $data['payment_jokul_server_set'] = $this->config->get('payment_jokul_server_set');
     }
-    if (isset($this->request->post['payment_doku_mallid'])) {
-      $data['payment_doku_mallid'] = $this->request->post['payment_doku_mallid'];
+    if (isset($this->request->post['payment_jokul_mallid'])) {
+      $data['payment_jokul_mallid'] = $this->request->post['payment_jokul_mallid'];
     } else {
-      $data['payment_doku_mallid'] = $this->config->get('payment_doku_mallid');
+      $data['payment_jokul_mallid'] = $this->config->get('payment_jokul_mallid');
     }
-    if (isset($this->request->post['payment_doku_shared'])) {
-      $data['payment_doku_shared'] = $this->request->post['payment_doku_shared'];
+    if (isset($this->request->post['payment_jokul_shared'])) {
+      $data['payment_jokul_shared'] = $this->request->post['payment_jokul_shared'];
     } else {
-      $data['payment_doku_shared'] = $this->config->get('payment_doku_shared');
+      $data['payment_jokul_shared'] = $this->config->get('payment_jokul_shared');
     }
 
     $this->load->model('localisation/geo_zone');
@@ -123,15 +123,15 @@ class ControllerExtensionPaymentDOKU extends Controller
     $this->load->model('localisation/order_status');
     $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
 
-    if (isset($this->request->post['payment_doku_status'])) {
-      $data['payment_doku_status'] = $this->request->post['payment_doku_status'];
+    if (isset($this->request->post['payment_jokul_status'])) {
+      $data['payment_jokul_status'] = $this->request->post['payment_jokul_status'];
     } else {
-      $data['payment_doku_status'] = $this->config->get('payment_doku_status');
+      $data['payment_jokul_status'] = $this->config->get('payment_jokul_status');
     }
-    if (isset($this->request->post['payment_doku_sort_order'])) {
-      $data['payment_doku_sort_order'] = $this->request->post['payment_doku_sort_order'];
+    if (isset($this->request->post['payment_jokul_sort_order'])) {
+      $data['payment_jokul_sort_order'] = $this->request->post['payment_jokul_sort_order'];
     } else {
-      $data['payment_doku_sort_order'] = $this->config->get('payment_doku_sort_order');
+      $data['payment_jokul_sort_order'] = $this->config->get('payment_jokul_sort_order');
     }
 
     $data['user_token'] = $this->session->data['user_token'];
@@ -140,34 +140,34 @@ class ControllerExtensionPaymentDOKU extends Controller
     $data['column_left'] = $this->load->controller('common/column_left');
     $data['footer'] = $this->load->controller('common/footer');
 
-    $this->response->setOutput($this->load->view('extension/payment/doku', $data));
+    $this->response->setOutput($this->load->view('extension/payment/jokul', $data));
   }
 
   public function install()
   {
-    $this->load->model('extension/payment/doku');
-    $this->model_extension_payment_doku->install();
+    $this->load->model('extension/payment/jokul');
+    $this->model_extension_payment_jokul->install();
   }
 
   public function uninstall()
   {
-    $this->load->model('extension/payment/doku');
-    $this->model_extension_payment_doku->uninstall();
+    $this->load->model('extension/payment/jokul');
+    $this->model_extension_payment_jokul->uninstall();
   }
 
   private function validate()
   {
-    if (!$this->user->hasPermission('modify', 'extension/payment/doku')) {
+    if (!$this->user->hasPermission('modify', 'extension/payment/jokul')) {
       $this->error['warning'] = $this->language->get('error_permission');
     }
 
-    if (!$this->request->post['payment_doku_companyid']) {
+    if (!$this->request->post['payment_jokul_companyid']) {
       $this->error['companyid'] = $this->language->get('error_companyid');
     }
-    if (!$this->request->post['payment_doku_mallid']) {
+    if (!$this->request->post['payment_jokul_mallid']) {
       $this->error['mallid'] = $this->language->get('error_mallid');
     }
-    if (!$this->request->post['payment_doku_shared']) {
+    if (!$this->request->post['payment_jokul_shared']) {
       $this->error['shared'] = $this->language->get('error_shared');
     }
 

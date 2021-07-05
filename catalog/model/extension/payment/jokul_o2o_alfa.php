@@ -4,7 +4,7 @@ class ModelExtensionPaymentJokulO2oAlfa extends Model
 {
   public function getMethod($address, $total)
   {
-    $this->load->language('extension/payment/doku');
+    $this->load->language('extension/payment/jokul');
 
     $status = true;
 
@@ -16,7 +16,7 @@ class ModelExtensionPaymentJokulO2oAlfa extends Model
         'code'       => 'jokul_o2o_alfa',
         'title'      => $this->config->get('payment_jokul_o2o_alfa_name'),
         'terms'      => '',
-        'sort_order' => $this->config->get('payment_doku_sort_order')
+        'sort_order' => $this->config->get('payment_jokul_sort_order')
       );
     }
 

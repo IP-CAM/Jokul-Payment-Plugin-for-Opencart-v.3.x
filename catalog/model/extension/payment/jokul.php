@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionPaymentDOKU extends Model
+class ModelExtensionPaymentJokul extends Model
 {
   public function getMethod($address, $total)
   {

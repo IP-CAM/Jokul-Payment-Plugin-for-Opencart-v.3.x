@@ -1,6 +1,6 @@
 <?php
 
-class ModelExtensionPaymentDOKU extends Model {
+class ModelExtensionPaymentJokul extends Model {
 
 	public function install() {
 		$this->db->query("

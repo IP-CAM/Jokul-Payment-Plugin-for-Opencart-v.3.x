@@ -4,11 +4,11 @@ class ControllerExtensionPaymentJokulVABca extends Controller
 {
     public function index()
     {
-        $this->language->load('extension/payment/doku');
+        $this->language->load('extension/payment/jokul');
         $this->load->model('checkout/order');
         $serverconfig = $this->getUrlLocal();
-        $data['urlLocal'] = $serverconfig . "/index.php?route=extension/payment/doku/redirect";
-        $data['urlSetProses'] = $serverconfig . "/index.php?route=extension/payment/doku/processdoku";
+        $data['urlLocal'] = $serverconfig . "/index.php?route=extension/payment/jokul/redirect";
+        $data['urlSetProses'] = $serverconfig . "/index.php?route=extension/payment/jokul/processdoku";
         $data['button_confirm'] = $this->language->get('button_confirm');
         $data['invoice_number'] = $this->session->data['order_id'];
         return $this->load->view('extension/payment/doku', $data);

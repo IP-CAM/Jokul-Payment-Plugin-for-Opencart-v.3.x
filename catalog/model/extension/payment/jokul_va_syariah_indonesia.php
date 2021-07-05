@@ -4,7 +4,7 @@ class ModelExtensionPaymentJokulVASyariahIndonesia extends Model
 {
   public function getMethod($address, $total)
   {
-    $this->load->language('extension/payment/doku');
+    $this->load->language('extension/payment/jokul');
 
     $status = true;
 
@@ -16,7 +16,7 @@ class ModelExtensionPaymentJokulVASyariahIndonesia extends Model
         'code'       => 'jokul_va_syariah_indonesia',
         'title'      => $this->config->get('payment_jokul_va_syariah_indonesia_name'),
         'terms'      => '',
-        'sort_order' => $this->config->get('payment_doku_sort_order')
+        'sort_order' => $this->config->get('payment_jokul_sort_order')
       );
     }
 

@@ -3,7 +3,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
 */
-class ControllerExtensionPaymentDOKU extends Controller
+class ControllerExtensionPaymentJokul extends Controller
 {
     public $ip_range = "103.10.129.";
     public $paymentChannel = array(
@@ -35,13 +35,13 @@ class ControllerExtensionPaymentDOKU extends Controller
     public function index()
     {
         $log = new Log('checkout.log');
-        $this->language->load('extension/payment/doku');
+        $this->language->load('extension/payment/jokul');
         $this->load->model('checkout/order');
         $log->write($this->model_checkout_order->getOrder($this->session->data));
         $order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
         $serverconfig = $this->getUrlLocal();
-        $data['urlLocal'] = $serverconfig . "/index.php?route=extension/payment/doku/redirect";
-        $data['urlSetProses'] = $serverconfig . "/index.php?route=extension/payment/doku/processdoku";
+        $data['urlLocal'] = $serverconfig . "/index.php?route=extension/payment/jokul/redirect";
+        $data['urlSetProses'] = $serverconfig . "/index.php?route=extension/payment/jokul/processdoku";
         $data['button_confirm'] = $this->language->get('button_confirm');
         $data['invoice_number'] = $this->session->data['order_id'];
         $data['amount'] = $this->currency->format($order_info['total'], $order_info['currency_code'], false, false);
@@ -98,7 +98,7 @@ class ControllerExtensionPaymentDOKU extends Controller
         if (isset($this->request->post['invoice_number'])) {
             $this->load->model('checkout/order');
         } else {
-            $this->log->write("Invalid Request - IP Logged " . $this->getipaddress());
+            $this->doku_log("Invalid Request - IP Logged " . $this->getipaddress());
         }
     }
     public function getipaddress()
@@ -126,7 +126,7 @@ class ControllerExtensionPaymentDOKU extends Controller
     public function redirect()
     {
         $baseUrl = 'https://api-sandbox.doku.com';
-        if ($this->config->get('payment_doku_server_set') == "1") {
+        if ($this->config->get('payment_jokul_server_set') == "1") {
             $baseUrl = 'https://api.doku.com/';
         }
 
@@ -136,7 +136,7 @@ class ControllerExtensionPaymentDOKU extends Controller
         $data['acquirer'] = '0';
 
         $this->load->model('account/order');
-        $products = $this->model_account_order->getOrderProducts($this->session->data['order_id']); 
+        $products = $this->model_account_order->getOrderProducts($this->session->data['order_id']);
         $products = $this->cart->getProducts();
         $data['list_product'] = $products;
 
@@ -146,17 +146,17 @@ class ControllerExtensionPaymentDOKU extends Controller
             $data['telephone'] = $this->customer->getTelephone();
             $this->load->model('account/address');
             $address = $this->model_account_address->getAddress($this->customer->getAddressId());
-            $data['payment_address'] = $address['address_1']. " " . $address['address_2'];
+            $data['payment_address'] = $address['address_1'] . " " . $address['address_2'];
             $trx_data = $this->model_account_address->getAddress($this->session->data['payment_address']['address_id']);
         } elseif (isset($this->session->data['guest'])) {
             $data['customer_id'] = '';
-            $data['payment_address'] = $this->session->data['payment_address']['address_1']. " " .$this->session->data['payment_address']['address_2'];
+            $data['payment_address'] = $this->session->data['payment_address']['address_1'] . " " . $this->session->data['payment_address']['address_2'];
             $data['email'] = $this->session->data['guest']['email'];
             $data['telephone'] = $this->session->data['guest']['telephone'];
             $trx_data = $this->session->data['payment_address'];
         }
-        $data['client_id'] = $this->config->get('payment_doku_mallid');
-        $data['sharedkey'] = $this->config->get('payment_doku_shared');
+        $data['client_id'] = $this->config->get('payment_jokul_mallid');
+        $data['sharedkey'] = $this->config->get('payment_jokul_shared');
         $data['amount'] = number_format($this->currency->format($order_info['total'], $order_info['currency_code'], false, false), 2, '.', '');
         $data['button_confirm'] = $this->language->get('button_confirm');
         $data['invoice_number'] = $this->session->data['order_id'];
@@ -203,8 +203,6 @@ class ControllerExtensionPaymentDOKU extends Controller
 
         $response = $this->post($url, $data, $signatureParams);
 
-        error_log("Dedye response : ".json_encode($response));
-
         if (strpos($data['paymentchannel'], "va") !== false) {
             $this->handleResponse($response, $paymentchannel, $data, $trx);
         } else if (strpos($data['paymentchannel'], "o2o") !== false) {
@@ -219,7 +217,7 @@ class ControllerExtensionPaymentDOKU extends Controller
         $rawbody = urldecode(file_get_contents('php://input'));
         $postData = json_decode($rawbody, true);
         $serviceId = $postData['service']['id'];
-        $sharedKey = $this->config->get('payment_doku_shared');
+        $sharedKey = $this->config->get('payment_jokul_shared');
 
         $myserverpath = explode("/", $_SERVER['PHP_SELF']);
         $serverpath = '/' . $myserverpath[1];
@@ -238,10 +236,10 @@ class ControllerExtensionPaymentDOKU extends Controller
 
         $signature = $this->doCreateNotifySignature($signatureParams, $rawbody);
 
-        $this->log->write("Notify Request Body: " . print_r($postData, true));
-        $this->log->write("Request Target: " . $serverpath . '/index.php?route=extension/payment/doku/notify');
+        $this->doku_log("Notify Request Body: " . print_r($postData, true), $postData["order"]["invoice_number"]);
+        $this->doku_log("Request Target: " . $serverpath . '/index.php?route=extension/payment/jokul/notify', $postData["order"]["invoice_number"]);
         if (empty($postData)) {
-            $this->log->write("Invalid Request Body format - IP Logged " . $this->getipaddress());
+            $this->doku_log("Invalid Request Body format - IP Logged " . $this->getipaddress(), $postData["order"]["invoice_number"]);
             http_response_code(400);
             die;
         }
@@ -253,7 +251,7 @@ class ControllerExtensionPaymentDOKU extends Controller
         if ($postData['service']['id'] === "ONLINE_TO_OFFLINE") {
             $trx['payment_code'] = $postData["online_to_offline_info"]["payment_code"];
             $trx['doku_payment_datetime'] = $postData["transaction"]["date"];
-        } else if($postData['service']['id'] === "VIRTUAL_ACCOUNT") {
+        } else if ($postData['service']['id'] === "VIRTUAL_ACCOUNT") {
             $trx['payment_code'] = $postData["virtual_account_info"]["virtual_account_number"];
             $trx['doku_payment_datetime'] = $postData["virtual_account_payment"]["date"];
         }
@@ -261,17 +259,15 @@ class ControllerExtensionPaymentDOKU extends Controller
         $trx['notify_type'] = "P"; //change if reverse is used
 
         if ($headers['Signature'] != $signature) {
-            error_log('signature valid');
-            $this->log->write("Signature: " . $signature);
-            $this->log->write("Jokul Notification Invalid Signature - IP Logged " . $this->getipaddress());
+            $this->doku_log("Jokul Notification Invalid Signature - IP Logged " . $this->getipaddress(), $postData["order"]["invoice_number"]);
             http_response_code(401);
             die;
         }
 
         if ($postData["transaction"]["status"] == "SUCCESS") {
-            $result = $this->checkTrx($trx,'', '', $serviceId);
+            $result = $this->checkTrx($trx, '', '', $serviceId);
             if ($result < 1) {
-                $this->log->write("Cannot find the transaction - IP Logged " . $this->getipaddress());
+                $this->doku_log("Cannot find the transaction - IP Logged " . $this->getipaddress(), $postData["order"]["invoice_number"]);
                 http_response_code(404);
                 die;
             } else {
@@ -279,18 +275,18 @@ class ControllerExtensionPaymentDOKU extends Controller
                 $this->load->model('checkout/order');
                 $this->cart->clear();
                 $this->model_checkout_order->addOrderHistory($trx['invoice_number'], 2, 'PROCESSING', true);
-                $result = $this->checkTrxStatus($trx,'',$serviceId );
+                $result = $this->checkTrxStatus($trx, '', $serviceId);
                 if ($result < 1) {
                     $this->add_dokuonecheckout($trx);
                 }
                 http_response_code(200);
             }
         } else {
-            $this->log->write("Cannot find the transaction - IP Logged " . $this->getipaddress());
+            $this->doku_log("Cannot find the transaction - IP Logged " . $this->getipaddress(), $postData["order"]["invoice_number"]);
             $this->load->model('checkout/order');
             $trx['result_msg'] = 'FAILED';
             $this->model_checkout_order->addOrderHistory($trx['invoice_number'], 10, 'FAILED', true);
-            $resultFailed = $this->checkTrxStatus($trx,'',$serviceId);
+            $resultFailed = $this->checkTrxStatus($trx, '', $serviceId);
             if ($resultFailed < 1) {
                 $this->add_dokuonecheckout($trx);
             }
@@ -301,8 +297,6 @@ class ControllerExtensionPaymentDOKU extends Controller
 
     public function checkTrx($trx, $process, $result_msg = '', $serviceId)
     {
-        error_log('Process ' . $process);
-        error_log('$serviceId ' . $serviceId);
         if ($result_msg == "PENDING") {
             return 0;
         }
@@ -312,22 +306,18 @@ class ControllerExtensionPaymentDOKU extends Controller
         }
         if (strtolower($serviceId) == strtolower('CREDIT_CARD')) {
             $process = 'PENDING_CC';
-            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "jokul" . " WHERE process_type = '$process'" . $check_result_msg . " AND invoice_number = '" . $trx['invoice_number'] . "'" . " AND amount = '" . $trx['amount'] . "'" );
+            $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "jokul" . " WHERE process_type = '$process'" . $check_result_msg . " AND invoice_number = '" . $trx['invoice_number'] . "'" . " AND amount = '" . $trx['amount'] . "'");
             return $query->num_rows;
         } else {
             $process = 'PENDING_MH_VA';
             $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "jokul" . " WHERE process_type = '$process'" . $check_result_msg . " AND invoice_number = '" . $trx['invoice_number'] . "'" . " AND amount = '" . $trx['amount'] . "'" . " AND payment_code = '" . $trx['payment_code'] . "'");
             return $query->num_rows;
         }
-
-
     }
 
     public function checkTrxStatus($trx, $process, $serviceId)
     {
         $process = 'NOTIFY';
-        error_log('Process ' . $process);
-        error_log('$serviceId ' . $serviceId);
         if (strtolower($serviceId) == strtolower('CREDIT_CARD')) {
             $query = $this->db->query("SELECT * FROM " . DB_PREFIX . "jokul" . " WHERE process_type = '$process'" . " AND invoice_number = '" . $trx['invoice_number'] . "'" . " AND amount = '" . $trx['amount'] . "'");
             return $query->num_rows;
@@ -361,19 +351,18 @@ class ControllerExtensionPaymentDOKU extends Controller
         $responseJson = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
-        $this->log->write("URL EXEC " . $ch);
-        $this->log->write("URL " . $url);
-        $this->log->write("Request  " . json_encode($bodyJson));
+
+        $this->doku_log("URL " . $url, $rawData['invoice_number']);
+        $this->doku_log("Request  " . json_encode($bodyJson),  $rawData['invoice_number']);
 
         if (is_string($responseJson)) {
             $responsePayment = json_decode($responseJson, false);
         } else {
             $responsePayment = $responseJson;
         }
-        
+
         $response = array('httpCode' => $httpcode, 'responsePayment' => $responsePayment);
-        $this->log->write("RESPONSE " . print_r($response, true));
+        $this->doku_log("RESPONSE " . print_r($response, true),  $rawData['invoice_number']);
         return $response;
     }
 
@@ -385,17 +374,14 @@ class ControllerExtensionPaymentDOKU extends Controller
         $responseJson = curl_exec($ch);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        $this->log->write("URL EXEC " . $ch);
-        $this->log->write("URL " . $url);
 
         if (is_string($responseJson)) {
             $responsePayment = json_decode($responseJson, false);
         } else {
             $responsePayment = $responseJson;
         }
-        
+
         $response = array('httpCode' => $httpcode, 'responsePayment' => $responsePayment);
-        $this->log->write("RESPONSE " . print_r($response, true));
         return $responsePayment;
     }
 
@@ -407,17 +393,17 @@ class ControllerExtensionPaymentDOKU extends Controller
             $itemQty[] = array('name' => $result['name'], 'price' => $result['price'], 'quantity' => $result['quantity']);
         }
 
-        $myserverpath = explode ( "/", $_SERVER['PHP_SELF'] );
-        if ( $myserverpath[1] <> 'admin' ) {
+        $myserverpath = explode("/", $_SERVER['PHP_SELF']);
+        if ($myserverpath[1] <> 'admin') {
             $serverpath = '/' . $myserverpath[1];
-            for ($i = 2; $i < count($myserverpath)-2; $i++) {
+            for ($i = 2; $i < count($myserverpath) - 2; $i++) {
                 $serverpath = $serverpath . '/' .  $myserverpath[$i];
             }
         } else {
             $serverpath = '';
         }
 
-        if((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) {
+        if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443) {
             $myserverprotocol = "https";
         } else {
             $myserverprotocol = "http";
@@ -428,7 +414,7 @@ class ControllerExtensionPaymentDOKU extends Controller
         } else {
             $port = '';
         }
-        $myservername = $_SERVER['SERVER_NAME'] .$port. $serverpath;
+        $myservername = $_SERVER['SERVER_NAME'] . $port . $serverpath;
 
         if ($this->customer->isLogged()) {
             $dataCustomer = array('id' => $data['customer_id'], 'name' => $data['customer_name'], 'email' => $data['email'], 'phone' => $data['telephone'], 'country' => 'ID', 'address' => $data['payment_address']);
@@ -437,31 +423,31 @@ class ControllerExtensionPaymentDOKU extends Controller
         }
 
         return array(
-			"customer" => $dataCustomer,
-			"order" => array(
-				"invoice_number" => $data['invoice_number'],
-				"line_items" => $itemQty,
-				"amount" => round($data['amount']),
-				"failed_url" => $myserverprotocol.'://'.$myservername."/index.php?route=extension/payment/doku/paymentfailedcc",
-				"callback_url" => $myserverprotocol.'://'.$myservername."/index.php?route=extension/payment/doku/paymentsuccesscc",
-				"auto_redirect" => true
-			),
-			"override_configuration" => array(
-				"themes" => array(
-					"language" => $data['language'] ,
-					"background_color" => $data['bg_color'] ,
-					"font_color" => $data['font_color'] ,
-					"button_background_color" => $data['button_bg_color'] ,
-					"button_font_color" => $data['button_font_color'] ,
-				)
-			),
-			"additional_info" => array (
-				"integration" => array (
-					"name" => "opencart-plugin",
-					"version" => "2.0.1"
-				)
-			)
-		);
+            "customer" => $dataCustomer,
+            "order" => array(
+                "invoice_number" => $data['invoice_number'],
+                "line_items" => $itemQty,
+                "amount" => round($data['amount']),
+                "failed_url" => $myserverprotocol . '://' . $myservername . "/index.php?route=extension/payment/jokul/paymentfailedcc",
+                "callback_url" => $myserverprotocol . '://' . $myservername . "/index.php?route=extension/payment/jokul/paymentsuccesscc",
+                "auto_redirect" => true
+            ),
+            "override_configuration" => array(
+                "themes" => array(
+                    "language" => $data['language'],
+                    "background_color" => $data['bg_color'],
+                    "font_color" => $data['font_color'],
+                    "button_background_color" => $data['button_bg_color'],
+                    "button_font_color" => $data['button_font_color'],
+                )
+            ),
+            "additional_info" => array(
+                "integration" => array(
+                    "name" => "opencart-plugin",
+                    "version" => "2.0.1"
+                )
+            )
+        );
     }
 
     public function preparePaymentData($data)
@@ -604,7 +590,7 @@ class ControllerExtensionPaymentDOKU extends Controller
     public function handleCcResponse($response, $paymentchannel, $data, $trx)
     {
         $responsePayment = $response['responsePayment'];
-        
+
         $httpcode = $response['httpCode'];
 
         if ($httpcode == 200) {
@@ -710,5 +696,18 @@ class ControllerExtensionPaymentDOKU extends Controller
         $data[8] = chr(ord($data[8]) & 0x3f | 0x80); // set bits 6-7 to 10
 
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));
+    }
+
+    function doku_log($log_msg, $invoiceNumber = "")
+    {
+        $log_filename = "doku_log";
+        $log_header = date(DATE_ATOM, time()) . ' ' . get_class($this) . '---> ' . $invoiceNumber . ' : ';
+        if (!file_exists($log_filename)) {
+            // create directory/folder uploads.
+            mkdir($log_filename, 0777, true);
+        }
+        $log_file_data = $log_filename . '/log_' . date('d-M-Y') . '.log';
+        // if you don't add `FILE_APPEND`, the file will be erased each time you add a log
+        file_put_contents($log_file_data, $log_header . $log_msg . "\n", FILE_APPEND);
     }
 }

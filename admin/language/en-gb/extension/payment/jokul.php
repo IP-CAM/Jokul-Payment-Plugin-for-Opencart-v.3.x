@@ -1,23 +1,12 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of doku_onecheckout
- *
- * @lordsanjay
- */
-
 // Heading
 $_['heading_title']                = 'Jokul - General Configuration';
                                    
 // Text                            
 $_['text_payment']                 = 'Payment';
 $_['text_success']                 = 'Success: You have modified Jokul configuration!';
-$_['text_doku']        = '<a onclick="window.open(\'https://jokul.doku.com\');"><img src="view/image/payment/doku.png" alt="DOKU" title="DOKU" /><br /></a>';
+$_['text_jokul']        = '<a onclick="window.open(\'https://jokul.doku.com\');"><img src="view/image/payment/doku.png" alt="DOKU" title="DOKU" /><br /></a>';
 $_['text_edit']              	   = 'Edit configuration';
 $_['text_extension']	    		= 'Extensions';
 // Parameter                       
@@ -71,6 +60,6 @@ if (!in_array($_SERVER['SERVER_PORT'], [80, 443])) {
 
 $myservername                = $_SERVER['SERVER_NAME'] .$port. $serverpath;
 $_['url_title']              = 'Set this URL to your Jokul Back Office';
-$_['url_notify']             = $myserverprotocol.'://'.$myservername.'/index.php?route=extension/payment/doku/notify';
+$_['url_notify']             = $myserverprotocol.'://'.$myservername.'/index.php?route=extension/payment/jokul/notify';
 
 ?>
