@@ -15,7 +15,6 @@ Jokul makes it easy for you accept payments from various channels. Jokul also hi
     - BCA VA
     - Bank Mandiri VA
     - Bank Syariah Indonesia VA
-    - Permata VA
     - DOKU VA
 2. Alfamart O2O
 3. Credit Card
