@@ -16,6 +16,9 @@ class ControllerExtensionPaymentJokul extends Controller
         ), "jokul_va_bca" => array(
             "path" => "/bca-virtual-account/v2/payment-code",
             "name" => "BCA VA"
+        ), "jokul_va_bri" => array(
+            "path" => "/bri-virtual-account/v2/payment-code",
+            "name" => "BRI VA"
         ), "jokul_va_permata" => array(
             "path" => "/permata-virtual-account/v2/payment-code",
             "name" => "Bank Permata"
