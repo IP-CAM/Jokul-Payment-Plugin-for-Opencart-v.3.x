@@ -6,6 +6,7 @@
 class ControllerExtensionPaymentJokul extends Controller
 {
     public $ip_range = "103.10.129.";
+    public $jokul_version = "1.2.0";
     public $paymentChannel = array(
         "jokul_va_mandiri" => array(
             "path" => "/mandiri-virtual-account/v2/payment-code",
@@ -447,7 +448,7 @@ class ControllerExtensionPaymentJokul extends Controller
             "additional_info" => array(
                 "integration" => array(
                     "name" => "opencart-plugin",
-                    "version" => "2.0.1"
+                    "version" => $this->jokul_version
                 )
             )
         );
@@ -471,7 +472,7 @@ class ControllerExtensionPaymentJokul extends Controller
             "additional_info" => array(
                 "integration" => array(
                     "name" => "opencart-plugin",
-                    "version" => "2.0.1"
+                    "version" => $this->jokul_version
                 )
             )
         );
@@ -501,7 +502,7 @@ class ControllerExtensionPaymentJokul extends Controller
             "additional_info" => array(
                 "integration" => array(
                     "name" => "opencart-plugin",
-                    "version" => "2.0.1"
+                    "version" => $this->jokul_version
                 )
             )
         );
